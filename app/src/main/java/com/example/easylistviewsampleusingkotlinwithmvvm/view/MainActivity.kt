@@ -1,19 +1,28 @@
 package com.example.easylistviewsampleusingkotlinwithmvvm.view
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.easylistviewsampleusingkotlinwithmvvm.R
 import com.example.easylistviewsampleusingkotlinwithmvvm.model.Item
 import com.example.easylistviewsampleusingkotlinwithmvvm.responses.DashboardResponse
 import com.example.easylistviewsampleusingkotlinwithmvvm.viewmodel.SampleViewModel
 import com.sayan.easylistwidget.EasyListView
+import com.sayan.easylistwidget.adapters.BasicRecyclerAdapter
+import com.sayan.easylistwidget.adapters.CustomRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.recycle_layout.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , EasyListView.OnBindViewHolderCalledListener<Item> {
 
     lateinit var  sampleViewModel: SampleViewModel
 
@@ -42,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                     .addItemModel(Item::class.java)
                     .addListItems(response.items)
                     .addRecyclerView(recyclerView)
+                    .addLayoutManager(GridLayoutManager(this, 2) as RecyclerView.LayoutManager)
                     .addRow(R.layout.recycle_layout)
                     .setOnItemClickListener(object : EasyListView.OnItemClickListener {
                         override fun onClick(view: View?, position: Int) {
@@ -63,7 +73,27 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    override fun onCustomBindViewHolder(
+        viewHolder: CustomRecyclerAdapter.CustomRecyclerViewHolder<Item>,
+        itemOnThatPosition: Item?,
+        position: Int
+    ) {
+        viewHolder.itemView.findViewById<TextView>(R.id.itemName).text = itemOnThatPosition?.name
 
+        itemOnThatPosition?.image?.let {
+            Glide.with(this)
+                .load(Uri.parse(itemOnThatPosition.image))
+                .into(itemIcon);
+        }
+    }
+
+    override fun onBasicBindViewHolder(
+        viewHolder: BasicRecyclerAdapter.SimpleTextViewHolder<Item>,
+        itemOnThatPosition: Item?,
+        position: Int
+    ) {
+        //Not Called in this situation
+    }
 
 
 }
