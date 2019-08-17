@@ -53,16 +53,14 @@ class MainActivity : AppCompatActivity() , EasyListView.OnBindViewHolderCalledLi
                     .addRecyclerView(recyclerView)
                     .addLayoutManager(GridLayoutManager(this, 2) as RecyclerView.LayoutManager)
                     .addRow(R.layout.recycle_layout)
-                    .setOnItemClickListener(object : EasyListView.OnItemClickListener {
-                        override fun onClick(view: View?, position: Int) {
-                            if (view != null) {
-                                if (view.id == R.id.parentLayout) {
-                                    Toast.makeText(this@MainActivity,response.items.get(position).name,Toast.LENGTH_SHORT).show()
-                                }
+                    .setOnItemClickListener { view, position ->
+                        if (view != null) {
+                            if (view.id == R.id.parentLayout) {
+                                Toast.makeText(this@MainActivity, response.items[position].name,Toast.LENGTH_SHORT).show()
                             }
                         }
-                    })
-//                    .setOnBindViewHolderCalledListener(this)
+                    }
+                    .setOnBindViewHolderCalledListener(this)
                     .build()
             }
             // if list is inValid then show toast msg
@@ -79,11 +77,12 @@ class MainActivity : AppCompatActivity() , EasyListView.OnBindViewHolderCalledLi
         position: Int
     ) {
         viewHolder.itemView.findViewById<TextView>(R.id.itemName).text = itemOnThatPosition?.name
+        val imageView  = viewHolder.itemView.findViewById<ImageView>(R.id.itemIcon)
 
         itemOnThatPosition?.image?.let {
             Glide.with(this)
                 .load(Uri.parse(itemOnThatPosition.image))
-                .into(itemIcon);
+                .into(imageView)
         }
     }
 
