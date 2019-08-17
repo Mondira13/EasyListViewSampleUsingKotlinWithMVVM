@@ -7,9 +7,9 @@ import retrofit2.http.GET;
 
 public interface APIInterface {
 
-    @GET("/bins/1g7n8d")
+    @GET("/bins/14v8oz")
     Call<DashboardResponse> getDashboardItems();
 
 }
 
-//      https://api.myjson.com/bins/1g7n8d
+//      https://api.myjson.com/bins/14v8oz
